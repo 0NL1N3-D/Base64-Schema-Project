@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image to Base64 Converter in schema made by anshul </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #inputImage, #imageName, #submitButton, #refreshButton {
+            margin: 10px 0;
+        }
+        textarea {
+            width: 100%;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Image to Base64 Converter</h1>
+    <input type="file" id="inputImage" accept="image/*">
+    <input type="text" id="imageName" placeholder="Enter image name (without extension)">
+    <textarea id="outputBase64" rows="10" readonly placeholder="Base64 encoded string will appear here"></textarea>
+    <textarea id="decodedString" rows="10" readonly placeholder="Decoded string from server will appear here"></textarea>
+    <button id="submitButton">Submit</button>
+    <button id="refreshButton">Refresh</button>
+
+    <script>
+        document.getElementById('inputImage').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onloadend = function () {
+                const base64 = reader.result;
+                console.log('Base64 string:', base64);
+                document.getElementById('outputBase64').value = base64;
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('submitButton').addEventListener('click', function () {
+            const base64 = document.getElementById('outputBase64').value;
+            const imageName = document.getElementById('imageName').value;
+            const inputImage = document.getElementById('inputImage');
+            const file = inputImage.files[0];
+            const imageType = file.type; // e.g., image/png, image/jpeg
+
+            if (!base64 || !imageName || !imageType) {
+                console.error('Base64 string, image name, or image type is missing');
+                return;
+            }
+
+            console.log('Sending data to server:', { base64, imageName, imageType });
+
+            // Send base64, imageName, and imageType to the server
+            fetch('http://localhost:3000/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ base64, imageName, imageType })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Server response:', data);
+                document.getElementById('decodedString').value = data.message;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        document.getElementById('refreshButton').addEventListener('click', function () {
+            document.getElementById('inputImage').value = '';
+            document.getElementById('imageName').value = '';
+            document.getElementById('outputBase64').value = '';
+            document.getElementById('decodedString').value = '';
+            console.log('Form has been reset');
+        });
+    </script>
+</body>
+</html>
