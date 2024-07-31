@@ -1,7 +1,3 @@
-Here’s a polished and detailed README description for your GitHub repository:
-
-markdown
-
 # Image to Base64 Converter
 
 This project is a web application that allows users to convert images into Base64 format and upload them to a server. With a clean and modern interface, users can select an image file, provide a custom name (without the file extension), and view the generated Base64 string. The application also communicates with a Node.js backend, which stores the uploaded images in a MongoDB database.
