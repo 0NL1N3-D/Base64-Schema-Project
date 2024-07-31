@@ -23,9 +23,4 @@ This project is a web application that allows users to convert images into Base6
 
 ## License
 
-This project is licensed under the MIT License. Feel free to use and modify it as needed!
-
-csharp
-
-### Instructions
-- This README provides a comprehensive overview of your project, including features.
+This project is licensed under the MIT License. Feel free to use and modify it as needed
